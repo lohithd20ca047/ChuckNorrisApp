@@ -1,5 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+
+import 'random_chuckNorris_text.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -9,32 +10,6 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  var chuckText = 'Chuck Norris will not die';
-
-  final chuckNorrisUrl = 'https://api.chucknorris.io/jokes/random';
-
-  var isLoading = false;
-
-  Future getRandomChuckNorrisText() async {
-    var dio = Dio();
-
-    var response = await dio.get(chuckNorrisUrl);
-
-    if (response.statusCode == 200) {
-      setState(() {
-        chuckText = response.data['value'];
-      });
-    } else {
-      debugPrint('Error requesting API');
-    }
-  }
-
-  void setLoading(bool value) {
-    setState(() {
-      isLoading = value;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,9 +19,11 @@ class _HomeWidgetState extends State<HomeWidget> {
           children: [
             GestureDetector(
               onTap: (() async {
-                setLoading(true);
-                await getRandomChuckNorrisText();
-                setLoading(false);
+                setState(() {
+                  setLoading(true);
+                  getRandomChuckNorrisText();
+                  setLoading(false);
+                });
               }),
               child: Container(
                 decoration: const BoxDecoration(
